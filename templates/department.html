@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/department.css' %}"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+</head>
+<style>
+    
+    /* *{
+    box-sizing: border-box;
+    background-color: rgb(86, 175, 219);
+    padding: 0px;
+    margin: 0px;
+} */
+.cname
+{
+    font-size: 50px;
+}
+
+p{
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.hr{
+        
+        margin: 40px 60px; 
+        
+    }
+img:hover{
+    background-color: yellow;
+
+}
+
+@media (max-width: 576px) {
+
+    .depart {
+        border: 1px solid red;
+
+    };
+    p{
+        font-size: 25px;
+    }
+    .ci img{
+        height: 80px;
+        width: 80px;
+        opacity: .5;
+        /* box-shadow: 7px 7px 10px #cbced1, -7px -7px 10px white;
+        border-radius: 10px; */
+    }
+    .hr{
+        float:left;
+        width: 60px;
+        height: 60px;
+        align-items: center;
+       
+    
+        
+        border-radius: 50%;
+        /* box-sizing: border-box;
+        box-shadow: 7px 7px 10px #cbced1, -7px -7px 10px white; */
+    }
+    /*       ###########################################           */
+    
+/* .text-box {
+    margin-left: 44vw;
+	 margin-top: 42vh;
+} */
+
+} 
+
+    /* 222222222222222222222222222222222222222222222222222222222222222222 */
+
+
+</style>
+<body >
+    
+        <div>
+            {% include 'department_navigation.html' %}
+        </div>
+      
+        <div class="hr">
+            <a href="CSE"><img src="{% static 'images/cse.png'%}" alt="cse image" srcset="" id="pic"></a>
+            <p>CSE</p>
+        </div>
+        <div class="hr">
+            <a href="CIVIL"><img src="{% static 'images/civil.png'%}" alt="cse image" srcset="" id="pic"></a>
+            <p>CIVIL</p>
+        </div>
+        <div class="hr">
+            <a href="ECE"><img src="{% static 'images/ece.png'%}" alt="cse image" srcset="" id="pic"></a>
+            <p>ECE</p>
+        </div>
+        <div class="hr">
+            <a href="EEE"> <img src="{% static 'images/eee.png'%}" alt="cse image" srcset="" id="pic"></a>
+            <p>EEE</p>
+        </div>
+        <div class="hr">
+            <a href="IT"><img src="{% static 'images/it.png'%}" alt="cse image" srcset="" id="pic"></a>
+            <p>IT</p>
+        </div>
+        <div class="hr">
+            <a href="MECHANICAL"><img src="{% static 'images/mech.png'%}" alt="cse image" srcset="" id="pic"></a>
+            <p>MECH</p>
+        </div>
+        <div class="hr">
+            <a href="BIO MEDICAL"><img src="{% static 'images/bio.png'%}" alt="cse image" srcset="" id="pic"></a>
+            <p>BIO MEDICAL</p>
+        </div>
+        <div class="hr">
+            <a href="AERONAUTICAL"><img src="{% static 'images/aero.png'%}" alt="cse image" srcset="" id="pic"></a>
+            <p>AERO</p>
+        </div>
+        <div class="hr">
+            <a href="GEO INFORMATICS"><img src="{% static 'images/geo.png'%}" alt="cse image" srcset="" id="pic"></a>
+            <p>GEO</p>
+        </div>
+        
+        <div class="hr">
+            <a href="MECHETRONICS"><img src="{% static 'images/mechetronics.png'%}" alt="cse image" srcset="" id="pic"></a>
+            <p>MECHET</p>
+        </div>
+        <div class="hr">
+            <a href="MEDICAL ELECTRONICS"><img src="{% static 'images/ml.png'%}" alt="cse image" srcset="" id="pic"></a>
+            <p>MEDICAL</p>
+        </div>
+        <div class="hr">
+            <a href="TEXTILE"><img src="{% static 'images/textile.png'%}" alt="cse image" srcset="" id="pic"></a>
+            <p>TEXTILE</p>
+        </div>
+        <div hidden>
+        <input id="error" value={{msg}} ></input>
+    </div>
+    </center>
+    
+</body>
+</html>
+<script>
+    var msg = document.getElementById("error").value;
+    if ( msg == "true" )
+    {
+        alert("staff's counld not access others department");
+    }
+    
+</script>

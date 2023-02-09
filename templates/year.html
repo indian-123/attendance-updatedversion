@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+           
+        .first
+        {
+            margin-left: 20%;
+           
+            
+        }
+        .second
+        {
+            margin-top: -200px;
+            margin-left: 60%;
+            
+        }
+
+        
+        .third
+        {
+            margin-top: 50px;
+            margin-left: 20%;
+            
+        }
+
+        .final
+        {
+            margin-top:-200px;
+            margin-left: 60%;
+        }
+
+        img
+        {
+            width: 220px;
+            height: 200px;
+            border-radius: 20px;
+        }
+
+      
+        @media only  screen and (max-width: 480px) 
+        {
+           
+            img
+            {
+                width: 130px;
+                height: 120px;
+            }
+           
+            .first
+            {
+                margin-left: 8%;
+            }
+            .second
+            {
+                margin-top: -120px;
+                margin-left: 52%;
+            }
+            .third
+            {
+                margin-left: 8%;
+                margin-top:120px;
+            }
+            .final
+            {
+                margin-top:-120px;
+                margin-left: 52%;
+            }
+        }
+           
+
+
+    </style>
+</head>
+
+<body>
+    {% include 'attendance_navigation.html' %}
+
+    <center><h2 class="clg">department of {{link}}</h2></center>
+    <br>
+    
+<div class="years">
+    <div class="first">
+        <a id="first" href="{{link}}/1"><img src="{% static 'images/years/first.jpeg' %}" alt="" ></a>
+    </div>
+
+    <div class="second">   
+        <a id="second" href="{{link}}/2"><img src="{% static 'images/years/second.jpg' %}" alt="" ></a>
+    </div> 
+
+    <div class="third">   
+        <a id="third" href="{{link}}/3"><img src="{% static 'images/years/third.jpg' %}" alt="" ></a>
+    </div> 
+
+    <div class="final">  
+        <a id="final" href="{{link}}/4"><img src="{% static 'images/years/final.jpg' %}" alt="" ></a>
+    </div> 
+</div>
+<br>
+</body>
+
+</html>
