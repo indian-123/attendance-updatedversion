@@ -8,9 +8,9 @@ from django.contrib import messages
 import random
 import requests;
 
-import cv2
-import numpy
-from pyzbar.pyzbar import decode
+# import cv2
+# import numpy
+# from pyzbar.pyzbar import decode
 ###############################################    AUTH     #########################################
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login , logout as auth_logout
@@ -49,8 +49,8 @@ def submit(request):
         else:
             return render(request,"institute signup.html",{"msg":"password not match"})
 
-        
-    
+
+
 ################################################################# login ############################################################
 
 def login(request):
@@ -60,13 +60,13 @@ def login(request):
         if request.POST["type"] == "admin":
             if models.college.objects.filter(username=users).exists():
                 obj = models.college.objects.get(username=users)
-                if obj.password == passw:                           
-                            return redirect("staffviewpage1",users)  
+                if obj.password == passw:
+                            return redirect("staffviewpage1",users)
                     #     return render(request,"staffAdmin.html",{"mydata":data,"logo":obj.logo.url,"userid":obj.username,"name":obj.name,"aid":users})
                     # else:
                     #     print(users)
                     #     return render(request,"staffAdmin.html",{"logo":obj.logo.url,"userid":obj.username,"name":obj.name,"aid":users})
-                
+
                 else:
                     messages.info(request,"2")
                     return redirect("home")
@@ -94,14 +94,17 @@ def staffviewpage(request,users):
             if models.Staff.objects.filter(staffCollege=obj.name).exists():
                 data=models.Staff.objects.filter(staffCollege=obj.name)
                 return render(request,"staffAdmin.html",{"mydata":data,"logo":obj.logo.url,"userid":obj.username,"name":obj.name,"aid":users})
-           
+            else:
+                return render(request,"staffAdmin.html",{"logo":obj.logo.url,"userid":obj.username,"name":obj.name,"aid":users})
+
+
 
 
 
 ###################################################################### after login #########
 def indexhome(request):
-    return render(request,"indexhome.html")  
-    
+    return render(request,"indexhome.html")
+
 def stafflog(request):
     users=request.user.username
     print(users)
@@ -123,37 +126,37 @@ def year(request,user,department):
         return render(request,"department.html",{"name":obj1.name,"logo":obj1.logo.url,"userid":stf.staffUsername,"msg":"true"})
 
 ############################################################## attendance ########################################################
-def auto(request,user,department,year):
-    obj = models.Staff.objects.get(staffUsername=user)
-    obj1 = models.college.objects.get(name=obj.staffCollege)
-    student = models.Student.objects.filter(department=department,year=year,clg = obj1.name)
+# def auto(request,user,department,year):
+#     obj = models.Staff.objects.get(staffUsername=user)
+#     obj1 = models.college.objects.get(name=obj.staffCollege)
+#     student = models.Student.objects.filter(department=department,year=year,clg = obj1.name)
 
-    cap = cv2.VideoCapture(0)
-    cap.set(3,640)
-    cap.set(4,480)
+#     cap = cv2.VideoCapture(0)
+#     cap.set(3,640)
+#     cap.set(4,480)
 
-    while True:
-        success,img = cap.read()
-        for barcode in decode(img):
-            
-            mydata = barcode.data.decode('utf-8')
-            print(mydata)
-            print(models.Student.objects.filter(reg=mydata).exists())
-            if models.Student.objects.filter(reg=mydata).exists():
-                data = models.Student.objects.all().filter(department=department,year=year,reg = mydata)
-                for i in data:
-                    print(i.name)
-                    print(i.reg)
-                    i.attendance = True
-                    i.save()
+#     while True:
+#         success,img = cap.read()
+#         for barcode in decode(img):
 
-                return redirect("attendance",user,department,year)
+#             mydata = barcode.data.decode('utf-8')
+#             print(mydata)
+#             print(models.Student.objects.filter(reg=mydata).exists())
+#             if models.Student.objects.filter(reg=mydata).exists():
+#                 data = models.Student.objects.all().filter(department=department,year=year,reg = mydata)
+#                 for i in data:
+#                     print(i.name)
+#                     print(i.reg)
+#                     i.attendance = True
+#                     i.save()
 
-            return redirect("attendance",user,department,year)
+#                 return redirect("attendance",user,department,year)
 
-            cv2.imshow('result',img)
-            cv2.waitKey(0)
-            
+#             return redirect("attendance",user,department,year)
+
+#             cv2.imshow('result',img)
+#             cv2.waitKey(0)
+
 
 
 
@@ -166,7 +169,7 @@ def department(request,user,department,year):
     obj1 = models.college.objects.get(name=obj.staffCollege)
     student = models.Student.objects.filter(department=department,year=year,clg = obj1.name)
     years = {"1":"first year","2":"second year","3":"third year","4":"final year"}
-    
+
     message = {"department":department,"year": years.get(str(year)),"logo":obj1.logo.url,"name":obj1.name,"detial":student,"userid":user}
     return render(request,"attendance.html",message)
 
@@ -179,7 +182,7 @@ def addstaffs(request,users):
     data=models.Staff.objects.all()
     obj=models.Staff()
     if request.method=='POST':
-    
+
         staffUsername = request.POST["s_username"]
         staffPassword= request.POST["s_password"]
         staffName = request.POST["s_name"]
@@ -202,11 +205,11 @@ def addstaffs(request,users):
 def newstaff(request,users):
     return render(request,"staffRegister.html")
 
-########################################################### UPDATE ################################################################### 
+########################################################### UPDATE ###################################################################
 
 def staff_update(request,id,users):
     if request.method == "POST":
-       
+
         obj=models.Staff.objects.get(id=id)
         obj.staffName = request.POST["s_name"]
         obj.staffDep = request.POST["s_dep"]
@@ -215,9 +218,9 @@ def staff_update(request,id,users):
         obj.staffPassword= request.POST["s_password"]
         obj.save()
         return redirect("staffviewpage1",users)
-    
+
     else:
-   
+
         obj=models.Staff.objects.get(id=id)
         return render(request,"staffUpdate.html",{"data":obj})
 
@@ -239,8 +242,8 @@ def staff_delete(request,id,users):
 
 def admin(request,user,department,year):
     obj = models.Staff.objects.get(staffUsername=user)
-    obj1 = models.college.objects.get(name=obj.staffCollege) 
-    detial = models.Student.objects.filter(department=department,year=year,clg = obj1.name) 
+    obj1 = models.college.objects.get(name=obj.staffCollege)
+    detial = models.Student.objects.filter(department=department,year=year,clg = obj1.name)
     return render(request,"studentAdmin.html",{"logo":obj1.logo.url,"mydata":detial,"userid":obj.staffUsername,"name":obj1.name})
 
 ############################################################ UPDATE   ###############################################
@@ -252,12 +255,12 @@ def update(request,id,user,department,year):
         obj.reg = request.POST["regnum"]
         obj.s_mobile = request.POST["s_number"]
         obj.p_mobile = request.POST["p_number"]
-        obj.save() 
+        obj.save()
         return redirect("studentAdmin",user,department,year)
     else:
         obj = models.Student.objects.get(id=id)
         clg = models.college.objects.get(name = obj.clg)
-        return render(request,"studentUpdate.html",{"data":obj,"logo":clg.logo.url,"name":clg.name,"userid":str(user)})   
+        return render(request,"studentUpdate.html",{"data":obj,"logo":clg.logo.url,"name":clg.name,"userid":str(user)})
 
 ######################################################### DELETE ##################################################
 
@@ -269,14 +272,14 @@ def delete(request,id,user,department,year):
 ######################################################### ADD STUDENT  ##############################################
 
 def adddata(request,user,department,year):
-    obj1 = models.Staff.objects.get(staffUsername=user) 
+    obj1 = models.Staff.objects.get(staffUsername=user)
     obj2 = models.Student()
     obj2.name = request.POST["names"]
     obj2.reg = request.POST["r_number"]
     obj2.s_mobile = request.POST["s_number"]
     obj2.p_mobile = request.POST["p_number"]
     obj2.clg = str(obj1.staffCollege)
-    obj2.department = str(department) 
+    obj2.department = str(department)
     obj2.year = str(year)
     obj2.save()
     return redirect("studentAdmin",user,department,year)
@@ -295,7 +298,7 @@ def back(request,user,department,year):
 
 ##########################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   SUBMIT   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@####################
 def send(request,user,department,year):
-    
+
     l =[]
     staf = models.Staff.objects.get(staffUsername = user)
     clg = models.college.objects.get(name=staf.staffCollege)
@@ -306,8 +309,8 @@ def send(request,user,department,year):
 
     for i in obj:
         if i.attendance  == False:
-            l.append(i.name)   
-            number = i.s_mobile   
+            l.append(i.name)
+            number = i.s_mobile
             msg = request.POST["whatsapp"]
             msg = "*Greetings from "+clg.name +" :*"+" "+msg
             print(clg.logo.url)
@@ -315,6 +318,6 @@ def send(request,user,department,year):
 
 
 
-    
+
     print(l)
     return redirect("attendance",user,department,year)
