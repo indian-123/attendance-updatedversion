@@ -57,7 +57,8 @@
 			<th>S.No</th>
 			<th>RollNo</th>
 			<th>Name</th>
-			<th>Attendance</th>
+			<th>Morning_Attendance</th>
+			<th>Evening_Attendance</th>
 		</tr>
 		{% for data in detial %}
 		<tr>
@@ -70,6 +71,12 @@
 				
 				
 				{% endif %} ></td>
+				<td><input class="ck" type="checkbox" value={{data.name}} name={{data.id}} 
+					{% if data.attendance %}
+					checked
+					
+					
+					{% endif %} ></td>
 
 
 		</tr>

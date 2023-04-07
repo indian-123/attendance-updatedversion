@@ -1,4 +1,5 @@
 from os import link
+from datetime import datetime
 import re
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -7,7 +8,9 @@ from twilio.rest import Client
 from django.contrib import messages
 import random
 import requests;
-
+# email
+from django.core.mail import send_mail
+from django.views.decorators.http import require_POST
 # import cv2
 # import numpy
 # from pyzbar.pyzbar import decode
@@ -126,36 +129,27 @@ def year(request,user,department):
         return render(request,"department.html",{"name":obj1.name,"logo":obj1.logo.url,"userid":stf.staffUsername,"msg":"true"})
 
 ############################################################## attendance ########################################################
-# def auto(request,user,department,year):
-#     obj = models.Staff.objects.get(staffUsername=user)
-#     obj1 = models.college.objects.get(name=obj.staffCollege)
-#     student = models.Student.objects.filter(department=department,year=year,clg = obj1.name)
+def auto(request,user,department,year):
+    print("success!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    l =[]
+    staf = models.Staff.objects.get(staffUsername = user)
+    clg = models.college.objects.get(name=staf.staffCollege)
+    obj = models.Student.objects.all().filter(department=department,year=year,clg=staf.staffCollege)
+    for i in obj:
+        if request.POST.get(str(i.id),False):
+            i.attendance=True
 
-#     cap = cv2.VideoCapture(0)
-#     cap.set(3,640)
-#     cap.set(4,480)
-
-#     while True:
-#         success,img = cap.read()
-#         for barcode in decode(img):
-
-#             mydata = barcode.data.decode('utf-8')
-#             print(mydata)
-#             print(models.Student.objects.filter(reg=mydata).exists())
-#             if models.Student.objects.filter(reg=mydata).exists():
-#                 data = models.Student.objects.all().filter(department=department,year=year,reg = mydata)
-#                 for i in data:
-#                     print(i.name)
-#                     print(i.reg)
-#                     i.attendance = True
-#                     i.save()
-
-#                 return redirect("attendance",user,department,year)
-
-#             return redirect("attendance",user,department,year)
-
-#             cv2.imshow('result',img)
-#             cv2.waitKey(0)
+    for i in obj:
+        if i.attendance  == False:
+            l.append(i.name)   
+            number = i.s_mobile   
+            msg = request.POST["whatsapp"]
+            # msg = "*Greetings from "+clg.name +" :*"+" "+msg
+            print(clg.logo.url)
+            # recipient_email = request.POST['whatsapp']
+            
+            send_mail('Test Email', msg, 'your_email@gmail.com', [number])
+            print("send")
 
 
 
@@ -169,9 +163,11 @@ def department(request,user,department,year):
     obj1 = models.college.objects.get(name=obj.staffCollege)
     student = models.Student.objects.filter(department=department,year=year,clg = obj1.name)
     years = {"1":"first year","2":"second year","3":"third year","4":"final year"}
-
-    message = {"department":department,"year": years.get(str(year)),"logo":obj1.logo.url,"name":obj1.name,"detial":student,"userid":user}
-    return render(request,"attendance.html",message)
+    today=datetime.today()
+    f_date=today.strftime("%d-%m-%Y")
+    Att=models.Attendance.objects.filter(obj1.name,Date_field=f_date)
+    message = {"department":department,"year": years.get(str(year)),"logo":obj1.logo.url,"name":obj1.name,"detial":student,"userid":user,"attendance":Att}
+    return render(request,"attendance.html",message,)
 
                                         # # # ' ' 'STAFF ' ' ' # # #
 
@@ -244,8 +240,7 @@ def admin(request,user,department,year):
     obj = models.Staff.objects.get(staffUsername=user)
     obj1 = models.college.objects.get(name=obj.staffCollege)
     detial = models.Student.objects.filter(department=department,year=year,clg = obj1.name)
-    return render(request,"studentAdmin.html",{"logo":obj1.logo.url,"mydata":detial,"userid":obj.staffUsername,"name":obj1.name})
-
+    return render(request,"studentAdmin.html",{"logo":obj1.logo.url,"mydata":detial,"userid":obj.staffUsername,"name":obj1.name,"attendance":Att})
 ############################################################ UPDATE   ###############################################
 
 def update(request,id,user,department,year):
@@ -312,10 +307,10 @@ def send(request,user,department,year):
             l.append(i.name)
             number = i.s_mobile
             msg = request.POST["whatsapp"]
-            msg = "*Greetings from "+clg.name +" :*"+" "+msg
+            # msg = "*Greetings from "+clg.name +" :*"+" "+msg
             print(clg.logo.url)
-            requests.get(f"https://www.ai2me.com/api/send-media.php?number={number}&msg={msg}&media=https://www.pcet.ac.in/wp-content/themes/park-theme/assets/img/park-50year-logo.png&apikey=9f05a8418bd39b18f88865347fe2b75486a4455c&instance=UfgvHJ9sd5BbRSw")
-
+            send_mail("college", msg, 'your_email@gmail.com', [number])
+            
 
 
 
